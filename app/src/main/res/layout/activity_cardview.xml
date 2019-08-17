@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/pink"
+
+tools:context=".CardviewActivity">
+
+<androidx.cardview.widget.CardView
+    android:layout_width="300dp"
+    android:layout_height="350dp"
+
+    android:layout_gravity="center"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/but_bg"
+    android:paddingTop="50dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/QuestionNo."
+        android:layout_height="wrap_content"
+       >
+        <TextView
+            android:id="@+id/Question_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+
+            android:layout_marginStart="1dp"
+            android:text="Question :"
+            android:textColor="#000000"
+            android:textSize="20sp"
+
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="1dp" />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="1"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Questions"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/Question"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/et_bg"
+            android:text="what is ur name?" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+
+            android:orientation="vertical">
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/choice1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/but_bg"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="derafs" />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/choice2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/but_bg"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="derafs" />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/choice3"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/but_bg"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="derafs" />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/choice4"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/but_bg"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="derafs" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
+
+
+</LinearLayout>
