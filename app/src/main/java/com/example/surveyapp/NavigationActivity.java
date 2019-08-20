@@ -46,6 +46,7 @@ public class NavigationActivity extends AppCompatActivity
     TextView emailTV;
     Radiobutton ans;
     RadioGroup radioGroup;
+
     private QuestionLibrary mQuestionLibrary = new QuestionLibrary();
     private TextView mQuestionNoView;
     private TextView mQuestionView;
@@ -54,7 +55,7 @@ public class NavigationActivity extends AppCompatActivity
     private RadioButton mChoice3;
     private RadioButton mChoice4;
     private Button next,prev;
-
+String name,email;
 
     private int mQuestionNoValue = 1;
     private int mQuestionValue = 0;
@@ -80,7 +81,20 @@ public class NavigationActivity extends AppCompatActivity
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(NavigationActivity.this);
+        if (acct != null) {
+           name = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            email = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
 
+            //nameTV.setText("Name: "+personName);
+            //emailTV.setText("Email: "+personEmail);
+            //idTV.setText("ID: "+personId);
+            //Glide.with(this).load(personPhoto).into(photoIV);
+        }
 
 
 
@@ -158,12 +172,17 @@ public class NavigationActivity extends AppCompatActivity
 }
 
 
-    private void updateQuestion() {
+    private void updateQuestion()
+    {
         mQuestionView.setText(mQuestionLibrary.getQuestion(mQuestionValue));
         mChoice1.setText(mQuestionLibrary.getChoice1(mQuestionValue));
         mChoice2.setText(mQuestionLibrary.getChoice2(mQuestionValue));
         mChoice3.setText(mQuestionLibrary.getChoice3(mQuestionValue));
         mChoice4.setText(mQuestionLibrary.getChoice4(mQuestionValue));
+        value=" ";
+        mChoice1.setChecked(false);
+        mChoice2.setChecked(false);
+        mChoice3.setChecked(false); mChoice4.setChecked(false);
 
 
     }
@@ -210,8 +229,14 @@ public class NavigationActivity extends AppCompatActivity
         {
             //ShowPopup();
             TextView exit;
+            TextView name,email;
             myDialog.setContentView(R.layout.custompopup);
             exit = (TextView) myDialog.findViewById(R.id.exit);
+           name = (TextView) myDialog.findViewById(R.id.namecp);
+            email = (TextView) myDialog.findViewById(R.id.emailcp);
+
+            name.setText(" "+name);
+            email.setText("Email: "+email);
             exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -244,7 +269,9 @@ public class NavigationActivity extends AppCompatActivity
                 i.setData(Uri.parse("https://play.google.com"));
             }
 
-        } else if (id == R.id.nav_share) {
+        }
+        else if (id == R.id.nav_share)
+        {
             Intent i=new Intent();
             i.setAction(Intent.ACTION_SEND);
             i.putExtra(Intent.EXTRA_SUBJECT,"android studio pro");
@@ -289,18 +316,26 @@ public class NavigationActivity extends AppCompatActivity
         //int selectedId = radioGroup.getCheckedRadioButtonId();
        //ans= (Radiobutton) findViewById(selectedId);
 
-           options=options+value+",";
-            mQuestionNoValue++;
-            mQuestionValue++;
-            if (mQuestionNoValue == 5) {
-                Intent i = new Intent(NavigationActivity.this, DemographyActivity.class);
-                i.putExtra("key", options);
-                NavigationActivity.this.startActivity(i);
 
-            } else {
-                updateQuestionNo(mQuestionNoValue);
-                updateQuestion();
-            }
+if(value!=" ")
+{
+    options = options + value + ",";
+    mQuestionNoValue++;
+    mQuestionValue++;
+    if (mQuestionNoValue == 5) {
+        Intent i = new Intent(NavigationActivity.this, DemographyActivity.class);
+        i.putExtra("key", options);
+        NavigationActivity.this.startActivity(i);
+
+    } else {
+        updateQuestionNo(mQuestionNoValue);
+        updateQuestion();
+    }
+}
+else
+{
+    Toast.makeText(this,"select an option",Toast.LENGTH_SHORT).show();
+}
 
         }
 

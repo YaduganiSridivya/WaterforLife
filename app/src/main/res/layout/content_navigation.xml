@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/pink"
+    android:background="@drawable/grad_bg"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NavigationActivity"
     tools:showIn="@layout/app_bar_navigation">
@@ -16,11 +16,11 @@
 
 
         <androidx.cardview.widget.CardView
-            android:layout_width="320dp"
-            android:layout_height="550dp"
+            android:layout_width="300dp"
+            android:layout_height="530dp"
             android:layout_marginTop="20dp"
 
-            android:layout_gravity="center|center_vertical"
+            android:layout_gravity="center"
 
             android:background="@drawable/but_bg"
             android:paddingTop="50dp"

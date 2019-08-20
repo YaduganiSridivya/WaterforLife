@@ -35,6 +35,7 @@ android:background="@drawable/grad_bg"
         />
 
     <TextView
+        android:id="@+id/namecp"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
@@ -42,6 +43,7 @@ android:background="@drawable/grad_bg"
         android:textColor="#FFF"
         android:gravity="center" />
     <TextView
+        android:id="@+id/emailcp"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
