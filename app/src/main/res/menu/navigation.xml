@@ -20,4 +20,13 @@
         android:orderInCategory="100"
         android:title="Login"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_demography"
+        android:orderInCategory="100"
+        android:title="Analysis"
+        app:showAsAction="never" />
+
+
+
 </menu>

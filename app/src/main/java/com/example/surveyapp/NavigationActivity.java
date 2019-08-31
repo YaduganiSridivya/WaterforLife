@@ -1,11 +1,18 @@
 package com.example.surveyapp;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -15,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -37,8 +45,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    public String TAG = MainActivity.class.getSimpleName();
+    private ProgressDialog pDialog;
+    private static String url ="https://api.androidhive.info/contacts/" ;
+
+
     Dialog myDialog;
     GoogleSignInClient mGoogleSignInClient;
     Button sign_out;
@@ -67,6 +86,9 @@ String name,email;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+
+       new Questions().execute();
 
         //dialog intialization
         myDialog=new Dialog(this);
@@ -130,7 +152,7 @@ String name,email;
                 value=mChoice1.getText().toString();
 
                 //options+=mChoice1.getText()+",";
-                Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
 
 
             }
@@ -141,7 +163,7 @@ String name,email;
                 value=mChoice2.getText().toString();
                // options+=mChoice2.getText()+",";
                // mQuestionNoValue++;
-                Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -150,7 +172,7 @@ String name,email;
             public void onClick(View v) {
                 value=mChoice3.getText().toString();
                // options+=mChoice3.getText()+",";
-                Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -160,7 +182,7 @@ String name,email;
                 value=mChoice4.getText().toString();
                 //options+=mChoice4.getText()+",";
               //  mQuestionNoValue++;
-                Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NavigationActivity.this,"Successfully signed out",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -224,6 +246,11 @@ String name,email;
         else if(id == R.id.action_login)
         {
             startActivity(new Intent(NavigationActivity.this,OAuthActivity.class));
+        }
+
+        else if(id == R.id.action_demography)
+        {
+            startActivity(new Intent(NavigationActivity.this,DemoComparsion.class));
         }
         else if(id==R.id.residents)
         {
@@ -372,5 +399,154 @@ else
         });
         myDialog.show();
     }*/
+
+    /**
+     * Async task class to get json by making HTTP call
+     */
+    private class Questions extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(NavigationActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+
+            // Making a request to url and getting response
+            String jsonStr = sh.makeGetServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    //JSONArray questions = jsonObj.getJSONArray("questions");
+                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+
+                    // looping through All Contacts
+                    //for (int i = 1; i <= questions.length(); i++) {
+                    for (int i = 0; i <= 3; i++) {
+                        // JSONObject c = questions.getJSONObject(i);
+                        JSONObject c = contacts.getJSONObject(i);
+
+                        //int qid = c.getInt("qid");
+                        // String question = c.getString("question");
+                        String question = c.getString("address");
+                        /*
+                        JSONArray options =new JSONArray("options");
+                        for(int j=1;j<=options.length();j++)
+                        {
+                            mQuestionLibrary.mChoices[i][j]= options.getString(j);
+                        }*/
+                        mQuestionLibrary.mChoices[i][0]=c.getString("id");
+                        mQuestionLibrary.mChoices[i][1]=c.getString("name");
+                        mQuestionLibrary.mChoices[i][2]=c.getString("email");
+                        mQuestionLibrary.mChoices[i][3]=c.getString("gender");
+                        mQuestionLibrary.mQuestions[i]=question;
+
+                    }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            //post call to update the answers
+            sh.makePostServiceCall(url);
+
+            //get call to get users answers
+            String jsonStr1 = sh.makeGetServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr1);
+
+            if (jsonStr1 != null) {
+                try {
+
+                    //here write code according to the way we want to parse the json data
+                    JSONObject jsonObj = new JSONObject(jsonStr1);
+                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+                    for (int i = 0; i <= 3; i++) {
+                        JSONObject c = contacts.getJSONObject(i);
+                        String question = c.getString("address");
+                        mQuestionLibrary.mChoices[i][0]=c.getString("id");
+                        mQuestionLibrary.mChoices[i][1]=c.getString("name");
+                        mQuestionLibrary.mChoices[i][2]=c.getString("email");
+                        mQuestionLibrary.mChoices[i][3]=c.getString("gender");
+                        mQuestionLibrary.mQuestions[i]=question;
+
+                    }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+        }
+
+    }
 }
 

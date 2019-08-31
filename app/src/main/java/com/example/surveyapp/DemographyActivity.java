@@ -59,24 +59,7 @@ public class DemographyActivity extends AppCompatActivity {
         okButton = (Button)findViewById(R.id.button);
         //text=(TextView)findViewById(R.id.textView);
         barChart = (BarChart)findViewById(R.id.mp_groupBarChart);
-        /*
-        HTTPAsyncTask asyncTask = new HTTPAsyncTask();
-        try {
-            result1 = asyncTask.execute(myUrl).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        HTTPAsyncTask1 asyncTask1 = new HTTPAsyncTask1();
 
-        try {
-            result2 = asyncTask1.execute(myUrl).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +136,7 @@ public class DemographyActivity extends AppCompatActivity {
     public void restart(View view) {
         startActivity(new Intent(DemographyActivity.this,NavigationActivity.class));
     }
-
+/*
     private  class HTTPAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -288,5 +271,6 @@ public class DemographyActivity extends AppCompatActivity {
         return result;
 
     }
+    */
 }
 
