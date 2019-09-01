@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run()
             {
-                Intent homeIntent = new Intent(MainActivity.this,OAuthActivity.class);
+                Intent homeIntent = new Intent(MainActivity.this,NavigationActivity.class);
                 startActivity(homeIntent);
                 finish();
             }
@@ -36,6 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void start(View view)
     {
-     startActivity(new Intent(MainActivity.this,OAuthActivity.class));
+     startActivity(new Intent(MainActivity.this,NavigationActivity.class));
     }
 }

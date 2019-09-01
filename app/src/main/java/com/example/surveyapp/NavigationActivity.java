@@ -60,10 +60,6 @@ public class NavigationActivity extends AppCompatActivity
 
     Dialog myDialog;
     GoogleSignInClient mGoogleSignInClient;
-    Button sign_out;
-    TextView nameTV;
-    TextView emailTV;
-    Radiobutton ans;
     RadioGroup radioGroup;
 
     private QuestionLibrary mQuestionLibrary = new QuestionLibrary();
@@ -74,12 +70,16 @@ public class NavigationActivity extends AppCompatActivity
     private RadioButton mChoice3;
     private RadioButton mChoice4;
     private Button next,prev;
-String name,email;
+    String name,email;
 
     private int mQuestionNoValue = 1;
     private int mQuestionValue = 0;
-    String options=" ";
-    String value=" ";
+    public String options="";
+    public String value="";
+    public String optionsArray[] = new String[4];
+
+    //VARIABLE USED TO STORE USERID PASSED FROM OAUTH ACTIVITY
+    public String userId;
 
 
     @Override
@@ -95,7 +95,11 @@ String name,email;
         //set the connection of radiogroup
         radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
 
-
+        //STORING USERID PASSED FROM OAUTH ACTIVITY
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+             userId = extras.getString("key");
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -144,7 +148,8 @@ String name,email;
        next = (Button)findViewById(R.id.next);
        prev = (Button)findViewById(R.id.prev);
 
-        updateQuestion();
+       // updateQuestion();
+
 
         mChoice1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +201,7 @@ String name,email;
 
     private void updateQuestion()
     {
+
         mQuestionView.setText(mQuestionLibrary.getQuestion(mQuestionValue));
         mChoice1.setText(mQuestionLibrary.getChoice1(mQuestionValue));
         mChoice2.setText(mQuestionLibrary.getChoice2(mQuestionValue));
@@ -204,7 +210,8 @@ String name,email;
         value=" ";
         mChoice1.setChecked(false);
         mChoice2.setChecked(false);
-        mChoice3.setChecked(false); mChoice4.setChecked(false);
+        mChoice3.setChecked(false);
+        mChoice4.setChecked(false);
 
 
     }
@@ -350,6 +357,7 @@ if(value!=" ")
     mQuestionNoValue++;
     mQuestionValue++;
     if (mQuestionNoValue == 5) {
+        optionsArray = options.split(",");
         Intent i = new Intent(NavigationActivity.this, DemographyActivity.class);
         i.putExtra("key", options);
         NavigationActivity.this.startActivity(i);
@@ -484,9 +492,11 @@ else
             }
 
             //post call to update the answers
-            sh.makePostServiceCall(url);
+            sh.makePostServiceCall(url,optionsArray,userId);
 
-            //get call to get users answers
+            //get call to get users answer
+            // HERE TWO SUBMISSION STRINGS MUST BE COLLECTED FROM THE BACKEND AND WRITE A LOGIC SUCH THAT IF THE USER HAS ONLY ONE SUBMISSION
+            //ONLY ONE SUBMISSION AFTER THE DEMOGRAPHIC ACTIVITY DEMOCOMPARISION ACTIVITY MUST NOT BE DISPLAYED ELSE MUST BE DISPLAYED.
             String jsonStr1 = sh.makeGetServiceCall(url);
 
             Log.e(TAG, "Response from url: " + jsonStr1);
@@ -497,6 +507,7 @@ else
                     //here write code according to the way we want to parse the json data
                     JSONObject jsonObj = new JSONObject(jsonStr1);
                     JSONArray contacts = jsonObj.getJSONArray("contacts");
+
                     for (int i = 0; i <= 3; i++) {
                         JSONObject c = contacts.getJSONObject(i);
                         String question = c.getString("address");

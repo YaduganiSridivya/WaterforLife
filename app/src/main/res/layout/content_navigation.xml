@@ -81,7 +81,7 @@
                     android:textSize="20sp"
                     android:textAlignment="center"
                     android:background="@drawable/et_bg"
-                    android:text="what is ur name?" />
+                     />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                         android:background="@drawable/but_bg"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:text="derafs" />
+                        />
 
                     <RadioButton
                         android:id="@+id/choiceb2"
@@ -117,7 +117,7 @@
                         android:background="@drawable/but_bg"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:text="derafs" />
+                        />
 
                     <RadioButton
                         android:id="@+id/choiceb3"
@@ -129,7 +129,7 @@
                         android:background="@drawable/but_bg"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:text="derafs" />
+                         />
 
                     <RadioButton
                         android:id="@+id/choiceb4"
@@ -141,7 +141,7 @@
                         android:background="@drawable/but_bg"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:text="derafs" />
+                         />
 
 
 </RadioGroup>

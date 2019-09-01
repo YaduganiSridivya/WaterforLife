@@ -80,7 +80,7 @@ public class HttpHandler {
         return sb.toString();
     }
 
-    public void makePostServiceCall(String reqUrl) {
+    public void makePostServiceCall(String reqUrl,String[] optionsArray,String userId) {
         String response = null;
         try {
 
@@ -95,7 +95,7 @@ public class HttpHandler {
             con.setRequestMethod("POST");
 
             // 2. build JSON object
-            JSONObject parent = buidJsonObject();
+            JSONObject parent = buidJsonObject(userId,optionsArray);
 
 
            /* OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
@@ -138,10 +138,10 @@ public class HttpHandler {
         }
 
     }
-    private  JSONObject buidJsonObject() throws JSONException {
+    private  JSONObject buidJsonObject(String userId,String[] optionsArray) throws JSONException {
         //creating a json object of the format corresponding to the backend
 
-        JSONObject cred   = new JSONObject();
+        /*JSONObject cred   = new JSONObject();
         JSONObject auth   = new JSONObject();
         JSONObject parent = new JSONObject();
 
@@ -151,26 +151,43 @@ public class HttpHandler {
         auth.put("tenantName", "adm");
         auth.put("passwordCredentials", cred);
 
-        parent.put("auth", auth);
+        parent.put("auth", auth);*/
 
-       /*
-       int q=0;
-        JSONObject first = new JSONObject();
+
+       int q=1;
+       //json main object
+        JSONObject obj = new JSONObject();
+        obj.put("uid",userId);
+
+        //json array to be added to te main object
+        JSONArray valuesArray = new JSONArray();
+
+        //sub objects to be added to the array
+        JSONObject first  = new JSONObject();
         first.put("qid",q);
-        first.put("selectedoption",arr[q++]);
-        JSONObject second = new JSONObject();
+        first.put("selectedOption",optionsArray[0]);
+        JSONObject second  = new JSONObject();
         second.put("qid",q);
-        second.put("selectedoption",arr[q++]);
-        JSONObject third = new JSONObject();
+        second.put("selectedOption",optionsArray[1]);
+        JSONObject third  = new JSONObject();
         third.put("qid",q);
-        third.put("selectedoption",arr[q++]);
-        JSONObject fourth = new JSONObject();
+        third.put("selectedOption",optionsArray[2]);
+        JSONObject fourth  = new JSONObject();
         fourth.put("qid",q);
-        fourth.put("selectedoption",arr[q++]);
-        */
+        fourth.put("selectedOption",optionsArray[3]);
+
+        //adding the objects to the array
+        valuesArray.put(0,first);
+        valuesArray.put(1,second);
+        valuesArray.put(2,third);
+        valuesArray.put(3,fourth);
+
+        //adding the array to the main object
+        obj.put("selectedOptions",valuesArray);
 
 
-        return parent;
+
+        return obj;
     }
 
 

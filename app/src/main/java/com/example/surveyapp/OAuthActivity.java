@@ -64,6 +64,9 @@ public class OAuthActivity extends AppCompatActivity  {
     SignInButton signInButton;
     GoogleSignInClient mGoogleSignInClient;
 
+    //A VARIABLE IS DECLARED HERE TO STORE THE USERID THAT IS SENT AS A REPSOPNSE FROM THE BACKEND ON CLICKING THE SIGN IN BUTTON
+    //USERID VARIABLE MUST BE INITIALIZED BY THE RESPONSE OF THE POST CALL
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +161,12 @@ public class OAuthActivity extends AppCompatActivity  {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
+
+            //PASSING THE USERID VALUE TO THE NAVIGATION ACTIVITY
+            Intent i= new Intent(OAuthActivity.this,NavigationActivity.class);
+            i.putExtra("key",userId);
+            startActivity(i);
+
             startActivity(new Intent(OAuthActivity.this,NavigationActivity.class));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

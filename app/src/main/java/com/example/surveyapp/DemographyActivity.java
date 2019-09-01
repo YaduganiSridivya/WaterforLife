@@ -44,11 +44,7 @@ public class DemographyActivity extends AppCompatActivity {
     TextView text;
     String values;
     String valuesArray[];
-    String[] ans;
     String myUrl = "http://myApi.com/get_some_data";
-    String result1;
-    String result2;
-    JSONObject newJson;
 
 
     @Override
@@ -64,7 +60,7 @@ public class DemographyActivity extends AppCompatActivity {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DemographyActivity.this,LastActivity.class);
+                Intent i = new Intent(DemographyActivity.this,DemoComparsion.class);
                 startActivity(i);
             }
         });
@@ -113,10 +109,17 @@ public class DemographyActivity extends AppCompatActivity {
     private ArrayList<BarEntry> barEntries1()
     {
         ArrayList<BarEntry> barEntries = new ArrayList<BarEntry>();
-        barEntries.add(new BarEntry(1,2000));
-        barEntries.add(new BarEntry(2,900));
-        barEntries.add(new BarEntry(3,1000));
-        barEntries.add(new BarEntry(4,1500));
+
+        //CHANGED THE PREVIOUS STATEMENTS TO TAKE THE VALUES FOR THE BAR GRAPH DYNAMICALLY
+
+         //barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[0])));
+         barEntries.add(new BarEntry(1,1500));
+         //barEntries.add(new BarEntry(2,Integer.parseInt(valuesArray[1])));
+        barEntries.add(new BarEntry(2,1200));
+        // barEntries.add(new BarEntry(3,Integer.parseInt(valuesArray[2])));
+        barEntries.add(new BarEntry(3,500));
+        // barEntries.add(new BarEntry(4,Integer.parseInt(valuesArray[3])));
+        barEntries.add(new BarEntry(4,1800));
 
         return barEntries;
 

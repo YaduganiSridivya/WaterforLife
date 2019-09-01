@@ -17,23 +17,26 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-
+//TWO STRINGS VALUES1 AND VALUES2 MUST BE OBTAINED FROM NAVIGATION ACTIVITY
 public class DemoComparsion extends AppCompatActivity {
 
     BarChart barChart;
     Button okButton;
     TextView text;
-    String values;
-    String valuesArray[];
+    String values1;
+    String valuesArray1[];
+    String values2;
+    String valuesArray2[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_comparsion);
+        setContentView(R.layout.activity_demography);
 
         okButton = (Button)findViewById(R.id.button);
-        text=(TextView)findViewById(R.id.textView);
+        //text=(TextView)findViewById(R.id.textView);
         barChart = (BarChart)findViewById(R.id.mp_groupBarChart);
+
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,14 +49,16 @@ public class DemoComparsion extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras!=null)
         {
-            values=extras.getString("key");
-            valuesArray = values.split(",");
+            values1=extras.getString("key1");
+            valuesArray1 = values1.split(",");
+            values2=extras.getString("key2");
+            valuesArray2 = values2.split(",");
         }
 
 
-        BarDataSet barDataSet1 = new BarDataSet(barEntries1(),"Your usage");
+        BarDataSet barDataSet1 = new BarDataSet(barEntries1(),"current submission");
         barDataSet1.setColor(Color.RED);
-        BarDataSet barDataSet2 = new BarDataSet(barEntries2(),"Standard usage");
+        BarDataSet barDataSet2 = new BarDataSet(barEntries2(),"Previous submission");
         barDataSet1.setColor(Color.BLUE);
 
         BarData data = new BarData(barDataSet1,barDataSet2);
@@ -87,18 +92,22 @@ public class DemoComparsion extends AppCompatActivity {
     private ArrayList<BarEntry> barEntries1()
     {
         ArrayList<BarEntry> barEntries = new ArrayList<BarEntry>();
-        barEntries.add(new BarEntry(1,2000));
-        // barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[0])));
-        barEntries.add(new BarEntry(2,900));
-        // barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[1])));
-        barEntries.add(new BarEntry(3,1000));
-        // barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[2])));
-        barEntries.add(new BarEntry(4,1500));
-        // barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[3])));
+
+        //CHANGED THE PREVIOUS STATEMENTS TO TAKE THE VALUES FOR THE BAR GRAPH DYNAMICALLY
+
+        //barEntries.add(new BarEntry(1,Integer.parseInt(valuesArray[0])));
+        barEntries.add(new BarEntry(1,1500));
+        //barEntries.add(new BarEntry(2,Integer.parseInt(valuesArray[1])));
+        barEntries.add(new BarEntry(2,1200));
+        // barEntries.add(new BarEntry(3,Integer.parseInt(valuesArray[2])));
+        barEntries.add(new BarEntry(3,500));
+        // barEntries.add(new BarEntry(4,Integer.parseInt(valuesArray[3])));
+        barEntries.add(new BarEntry(4,1800));
 
         return barEntries;
 
     }
+
     private ArrayList<BarEntry> barEntries2()
     {
         ArrayList<BarEntry> barEntries = new ArrayList<BarEntry>();
@@ -110,6 +119,7 @@ public class DemoComparsion extends AppCompatActivity {
         return barEntries;
 
     }
+
 
 }
 
