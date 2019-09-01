@@ -3,6 +3,9 @@ package com.example.surveyapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,9 +55,16 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
-public class OAuthActivity extends AppCompatActivity  {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+public class OAuthActivity extends AppCompatActivity  {
+    private static String url ="https://api.androidhive.info/contacts/" ;
+    public String TAG = MainActivity.class.getSimpleName();
+    private ProgressDialog pDialog;
     private TextView t;
+    public String optionsArray[] = new String[4];
    // private FirebaseAuth firebaseAuth;
     //int[] nameList={R.drawable.wl5,R.drawable.icon,R.drawable.wl5,R.drawable.icon};
 
@@ -187,5 +197,154 @@ public class OAuthActivity extends AppCompatActivity  {
         super.onStart();
     }
 
+
+    private class Questions extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(OAuthActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+
+            // Making a request to url and getting response
+            String jsonStr = sh.makeGetServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    //JSONArray questions = jsonObj.getJSONArray("questions");
+                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+
+                    // looping through All Contacts
+                    //for (int i = 1; i <= questions.length(); i++) {
+                    for (int i = 0; i <= 3; i++) {
+                        // JSONObject c = questions.getJSONObject(i);
+                        JSONObject c = contacts.getJSONObject(i);
+
+                        //int qid = c.getInt("qid");
+                        // String question = c.getString("question");
+                        String question = c.getString("address");
+                        /*
+                        JSONArray options =new JSONArray("options");
+                        for(int j=1;j<=options.length();j++)
+                        {
+                            mQuestionLibrary.mChoices[i][j]= options.getString(j);
+                        }*/
+                   /*     mQuestionLibrary.mChoices[i][0]=c.getString("id");
+                        mQuestionLibrary.mChoices[i][1]=c.getString("name");
+                        mQuestionLibrary.mChoices[i][2]=c.getString("email");
+                        mQuestionLibrary.mChoices[i][3]=c.getString("gender");
+                        mQuestionLibrary.mQuestions[i]=question;*/
+
+                    }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            //post call to update the answers
+            sh.makePostServiceCall(url,optionsArray,userId);
+
+            //get call to get users answer
+            // HERE TWO SUBMISSION STRINGS MUST BE COLLECTED FROM THE BACKEND AND WRITE A LOGIC SUCH THAT IF THE USER HAS ONLY ONE SUBMISSION
+            //ONLY ONE SUBMISSION AFTER THE DEMOGRAPHIC ACTIVITY DEMOCOMPARISION ACTIVITY MUST NOT BE DISPLAYED ELSE MUST BE DISPLAYED.
+            String jsonStr1 = sh.makeGetServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr1);
+
+            if (jsonStr1 != null) {
+                try {
+
+                    //here write code according to the way we want to parse the json data
+                    JSONObject jsonObj = new JSONObject(jsonStr1);
+                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+
+                    for (int i = 0; i <= 3; i++) {
+                        JSONObject c = contacts.getJSONObject(i);
+                        String question = c.getString("address");
+                     /*   mQuestionLibrary.mChoices[i][0]=c.getString("id");
+                        mQuestionLibrary.mChoices[i][1]=c.getString("name");
+                        mQuestionLibrary.mChoices[i][2]=c.getString("email");
+                        mQuestionLibrary.mChoices[i][3]=c.getString("gender");
+                        mQuestionLibrary.mQuestions[i]=question;*/
+
+                    }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+        }
+
+    }
 
 }
